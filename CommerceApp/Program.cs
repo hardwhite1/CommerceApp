@@ -1,7 +1,9 @@
+using CommerceApp.Contracts.Carts;
 using CommerceApp.Contracts.Products;
 using CommerceApp.Data;
 using CommerceApp.Services.Products;
 using Microsoft.EntityFrameworkCore;
+using CommerceApp.Services.Carts;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(option
     .Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<ICartService, CartService>();
 
 var app = builder.Build();
 
