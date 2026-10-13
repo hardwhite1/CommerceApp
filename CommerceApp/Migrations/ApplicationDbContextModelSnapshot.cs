@@ -43,6 +43,9 @@ namespace CommerceApp.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartId");
@@ -63,6 +66,9 @@ namespace CommerceApp.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("TotalAmount")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

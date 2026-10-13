@@ -6,7 +6,7 @@ using CommerceApp.Contracts.Carts;
 
 namespace CommerceApp.Services.Carts
 {
-    public class CartService: ICartService
+    public class CartService : ICartService
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -40,7 +40,7 @@ namespace CommerceApp.Services.Carts
         public async Task<CartDto> AddItem(int cartId, int productId, int quantity)
         {
             //1. Validate incoming quantity
-            if(quantity <= 0)
+            if (quantity <= 0)
             {
                 throw new ArgumentException("Quantity must be greater than zero");
             }
@@ -49,15 +49,15 @@ namespace CommerceApp.Services.Carts
             var cart = await _dbContext.Carts
                         .Include(c => c.CartItems)
                         .FirstOrDefaultAsync(ci => ci.Id == cartId);
-            if(cart == null)
+            if (cart == null)
             {
                 throw new KeyNotFoundException($"Cart with ID {cartId} was not found");
             }
 
             //3. Find the product
             var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == productId);
-            if(product == null)
-            { 
+            if (product == null)
+            {
                 throw new KeyNotFoundException($"Product with ID {productId} does not exist");
             }
 
@@ -66,13 +66,13 @@ namespace CommerceApp.Services.Carts
             var currentQuantity = existingItem?.Quantity ?? 0;
             var newQuantity = currentQuantity + quantity;
 
-            if(newQuantity > product.StockQuantity)
+            if (newQuantity > product.StockQuantity)
             {
                 throw new InvalidOperationException($"Insufficient stock. Available quantity: {product.StockQuantity}. ");
             }
 
             //5. Add a new item or update the existing one
-            if(existingItem == null)
+            if (existingItem == null)
             {
                 var cartItem = new CartItem
                 {
@@ -104,7 +104,7 @@ namespace CommerceApp.Services.Carts
         public async Task<CartDto?> UpdateItemQuantity(int cartId, int productId, int quantity)
         {
             //1. validate quantity
-            if(quantity <= 0)
+            if (quantity <= 0)
             {
                 throw new ArgumentException("Quantity must be greater than zero");
             }
@@ -113,13 +113,13 @@ namespace CommerceApp.Services.Carts
             var cartItem = await _dbContext.CartItems.Include(ci => ci.Product)
                             .FirstOrDefaultAsync(ci => ci.CartId == cartId && ci.ProductId == productId);
 
-            if(cartItem == null)
+            if (cartItem == null)
             {
                 return null;
             }
 
             //3. Check available stock
-            if(quantity > cartItem.Product.StockQuantity)
+            if (quantity > cartItem.Product.StockQuantity)
             {
                 throw new InvalidOperationException($"Insufficient stock. Available quantity: " + $"{cartItem.Product.StockQuantity}");
             }
@@ -140,7 +140,7 @@ namespace CommerceApp.Services.Carts
         public async Task<bool> RemoveItem(int cartId, int productId)
         {
             var cartItems = await _dbContext.CartItems.FirstOrDefaultAsync(ci => ci.CartId == cartId && ci.ProductId == productId);
-            if(cartItems == null)
+            if (cartItems == null)
             {
                 return false;
             }
@@ -156,7 +156,7 @@ namespace CommerceApp.Services.Carts
             var cart = await _dbContext.Carts.Include(c => c.CartItems)
                        .FirstOrDefaultAsync(c => c.Id == cartId);
 
-            if(cart == null)
+            if (cart == null)
             {
                 return false;
             }
@@ -166,7 +166,7 @@ namespace CommerceApp.Services.Carts
 
             return true;
         }
-        
+
 
         private static CartDto MapToDto(Cart cart)
         {
@@ -184,8 +184,8 @@ namespace CommerceApp.Services.Carts
                 }).ToList()
             };
         }
-        
-    
-        
+
+
+
     }
 }
