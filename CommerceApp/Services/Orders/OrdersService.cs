@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommerceApp.Services.Orders
 {
-    public class OrderService : IOrderService
+    public class OrderService : IOrdersService
     {
         private readonly ApplicationDbContext _context;
         public OrderService(ApplicationDbContext context)
@@ -95,7 +95,7 @@ namespace CommerceApp.Services.Orders
             
         }
 
-        public async Task<OrderDto?> GetOrderByIdAsync(int orderId)
+        public async Task<OrderDto?> GetOrdersByIdAsync(int orderId)
         {
             var order = await _context.Orders.Include(o => o.OrderItems)
                         .ThenInclude(oi => oi.Product)
