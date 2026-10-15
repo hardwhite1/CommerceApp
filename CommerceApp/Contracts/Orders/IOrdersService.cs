@@ -6,7 +6,7 @@ namespace CommerceApp.Contracts.Orders
     {
         Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
         Task<OrderDto?> GetOrdersByIdAsync(int id);
-        Task<OrderDto> CreateOrderAsync(OrderItemDto dto);
+        Task<OrderDto> CreateOrderAsync(CreateOrderDto dto);
         Task<bool> CancelOrderAsync(int id);
 
     }
