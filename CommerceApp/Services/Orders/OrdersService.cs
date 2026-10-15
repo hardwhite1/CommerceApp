@@ -84,6 +84,67 @@ namespace CommerceApp.Services.Orders
                 }).ToList()
             };
         }
+
+        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        {
+            var orders = await _context.Orders.Include(o => o.OrderItems)
+                         .ThenInclude(oi => oi.Product)
+                         .AsNoTracking()
+                         .ToListAsync();
+            return orders.Select(MapToDto).ToList();
+            
+        }
+
+        public async Task<OrderDto?> GetOrderByIdAsync(int orderId)
+        {
+            var order = await _context.Orders.Include(o => o.OrderItems)
+                        .ThenInclude(oi => oi.Product)
+                        .AsNoTracking()
+                        .FirstOrDefaultAsync(o => o.Id == orderId);
+            return order == null ? null : MapToDto(order);
+            
+        }
+
+        public async Task<bool> CancelOrderAsync(int id)
+        {
+            var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
+            if (order == null)
+            {
+                return false;
+            }
+            if (order.Status != "pending")
+            {
+                return false;
+            }
+            order.Status = "cancelled";
+            
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+
+        private static OrderDto MapToDto(Order order)
+        {
+            return new OrderDto
+            {
+                Id = order.Id,
+                OrderDate = order.OrderDate,
+                Status = order.Status,
+                TotalAmount = order.TotalAmount,
+
+                OrderItems = order.OrderItems.Select(item =>
+
+                    new OrderItemDto
+                    {
+                        ProductId = item.ProductId,
+                        ProductName = item.Product.Name,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.UnitPrice
+                    }
+                ).ToList()
+
+            };
+        }
     }
 
 
