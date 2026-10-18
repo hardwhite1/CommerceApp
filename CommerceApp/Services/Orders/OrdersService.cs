@@ -66,6 +66,8 @@ namespace CommerceApp.Services.Orders
                 });
             }
             _context.Orders.Add(order);
+
+            await _context.SaveChangesAsync();
             //Map the saved order to its response DTO
             return new OrderDto
             {

@@ -4,6 +4,8 @@ using CommerceApp.Data;
 using CommerceApp.Services.Products;
 using Microsoft.EntityFrameworkCore;
 using CommerceApp.Services.Carts;
+using CommerceApp.Contracts.Orders;
+using CommerceApp.Services.Orders;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(option
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IOrdersService, OrderService>();
 
 var app = builder.Build();
 
