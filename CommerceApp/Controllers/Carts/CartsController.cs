@@ -1,5 +1,6 @@
 using CommerceApp.Contracts.Carts;
 using Microsoft.AspNetCore.Mvc;
+using CommercialApp.DTOs.Cart;
 
 namespace CommerceApp.Controllers.Carts
 {
@@ -32,9 +33,9 @@ namespace CommerceApp.Controllers.Carts
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddItem(int cartId, int productId, int quantity)
+        public async Task<IActionResult> AddItem(int cartId, AddCartItemDto dto)
         {
-            var cart = await _cartService.AddItem(cartId, productId, quantity);
+            var cart = await _cartService.AddItem(cartId, dto.ProductId, dto.Quantity);
             return CreatedAtAction(
                 nameof(GetCartById),
                 new{id = cart.Id}, cart
