@@ -30,6 +30,11 @@ namespace CommerceApp.Controllers.Orders
         {
             var order = await _ordersService.GetOrdersByIdAsync(id);
 
+            if(order == null )
+            {
+                return NotFound();
+            }
+
             return Ok(order);
         }
 
