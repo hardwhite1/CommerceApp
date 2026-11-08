@@ -1,4 +1,5 @@
 using CommerceApp.Contracts.Carts;
+using CommerceApp.DTOs.Cart;
 using Microsoft.AspNetCore.Mvc;
 using CommercialApp.DTOs.Cart;
 
@@ -30,6 +31,14 @@ namespace CommerceApp.Controllers.Carts
             var cart = await _cartService.GetCartById(cartId);
 
             return cart == null ? NotFound() :  Ok(cart);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCart()
+        {
+            var cart = await _cartService.CreateCart();
+
+            return CreatedAtAction(nameof(GetCartById), new { cartId = cart.Id }, cart);
         }
 
         [HttpPost("{cartId}/items")]
