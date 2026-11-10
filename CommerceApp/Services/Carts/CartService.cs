@@ -87,6 +87,7 @@ namespace CommerceApp.Services.Carts
                 {
                     CartId = cartId,
                     ProductId = productId,
+                    UnitPrice = product.Price,
                     Quantity = quantity
                 };
                 _dbContext.CartItems.Add(cartItem);
