@@ -37,6 +37,15 @@ namespace CommerceApp.Services.Carts
             return cart == null ? null : MapToDto(cart);
         }
 
+        public async Task<CartDto> CreateCart()
+        {
+            var cart = new Cart();
+            _dbContext.Carts.Add(cart);
+            await _dbContext.SaveChangesAsync();
+
+            return MapToDto(cart);
+        }
+
         public async Task<CartDto> AddItem(int cartId, int productId, int quantity)
         {
             //1. Validate incoming quantity

@@ -6,6 +6,7 @@ namespace CommerceApp.Contracts.Carts
     {
         Task<IEnumerable<CartDto>> GetAllCarts();
         Task<CartDto?> GetCartById(int id);
+        Task<CartDto> CreateCart();
         Task<CartDto> AddItem(int cartId, int productId, int quantity);
         Task<CartDto?> UpdateItemQuantity(int cartId, int productId, int quantity);
         Task<bool> RemoveItem(int cartId, int productId);
