@@ -11,5 +11,6 @@ namespace CommerceApp.Contracts.Carts
         Task<CartDto?> UpdateItemQuantity(int cartId, int productId, int quantity);
         Task<bool> RemoveItem(int cartId, int productId);
         Task<bool> ClearCart(int cartId);
+        Task<IEnumerable<CartItemDto>> GetCartItems(int cartId);
     }
 }

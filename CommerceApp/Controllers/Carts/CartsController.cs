@@ -76,5 +76,13 @@ namespace CommerceApp.Controllers.Carts
 
             return cleared ? NoContent() : NotFound();
         }
+
+        [HttpGet("{cartId}/items")]
+        public async Task<IActionResult> GetCartItems(int cartId)
+        {
+            var cartItems = await _cartService.GetCartItems(cartId);
+
+            return Ok(cartItems);
+        }
     }
 }

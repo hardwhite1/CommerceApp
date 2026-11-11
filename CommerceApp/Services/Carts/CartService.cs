@@ -177,6 +177,29 @@ namespace CommerceApp.Services.Carts
             return true;
         }
 
+        public async Task<IEnumerable<CartItemDto>> GetCartItems(int cartId)
+        {
+            var cart = await _dbContext.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == cartId);
+
+            if (cart == null)
+            {
+                throw new KeyNotFoundException($"Cart with ID {cartId} was not found");
+            }
+
+            return cart.CartItems.Select(item => new CartItemDto
+            {
+                Id = item.Id,
+                ProductId = item.ProductId,
+                ProductName = item.Product.Name,
+                Price = item.Product.Price,
+                Quantity = item.Quantity
+            }).ToList();
+        }
+
 
         private static CartDto MapToDto(Cart cart)
         {
