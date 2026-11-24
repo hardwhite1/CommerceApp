@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using CommerceApp.Services.Carts;
 using CommerceApp.Contracts.Orders;
 using CommerceApp.Services.Orders;
+using Microsoft.AspNetCore.Identity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,13 +21,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//DbContext configuration
-builder.Services.AddDbContext<ApplicationDbContext, ApplicationDbContext>(options => options.UseSqlite(builder
-    .Configuration.GetConnectionString("DefaultConnection")));
+// DbContext configuration
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseMySql(
+        connectionString,
+        ServerVersion.AutoDetect(connectionString)
+    ));
 
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IOrdersService, OrderService>();
+builder.Services.AddIdentityApiEndpoints<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddCors(options =>
 {
@@ -39,6 +46,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
 
@@ -50,9 +59,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapIdentityApi<IdentityUser>();
+
 app.UseCors("AngularPolicy");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
