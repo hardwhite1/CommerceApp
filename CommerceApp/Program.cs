@@ -40,7 +40,6 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
-
 // DbContext configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
