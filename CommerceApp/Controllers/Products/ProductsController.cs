@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using CommerceApp.Contracts.Products;
 using CommerceApp.DTOs.Products;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CommerceApp.Controllers.Products
 {
@@ -15,6 +16,7 @@ namespace CommerceApp.Controllers.Products
             _productService = productService;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -22,6 +24,7 @@ namespace CommerceApp.Controllers.Products
             return Ok(products);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(int id)
         {
@@ -32,6 +35,8 @@ namespace CommerceApp.Controllers.Products
             }
             return Ok(product);
         }
+
+        [Authorize(Roles="Admin")]
         [HttpPost]
         public async Task<IActionResult> AddProduct(CreateProductDto dto)
         {
@@ -42,6 +47,7 @@ namespace CommerceApp.Controllers.Products
             );
         }
 
+        [Authorize(Roles="Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto dto)
         {
@@ -52,6 +58,8 @@ namespace CommerceApp.Controllers.Products
             }
             return Ok(product);
         }
+
+        [Authorize(Roles="Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
